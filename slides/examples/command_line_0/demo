@@ -2,8 +2,8 @@
 
 ################################################################################
 
-cmake_source_dir="@CMAKE_SOURCE_DIR@"
-cmake_binary_dir="@CMAKE_BINARY_DIR@"
+cmake_source_dir="/home/yiboy/Desktop/clang_exercise/clang_libraries_companion/slides/examples/command_line_0"
+cmake_binary_dir="/home/yiboy/Desktop/clang_exercise/clang_libraries_companion/slides/examples/command_line_0"
 
 panic()
 {
