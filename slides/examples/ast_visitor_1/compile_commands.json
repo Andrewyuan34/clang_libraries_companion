@@ -1,0 +1,20 @@
+[
+{
+  "directory": "/home/yiboy/Desktop/clang_exercise/clang_libraries_companion/slides/examples/ast_visitor_1",
+  "command": "/home/frodo/public/ugls_lab-10.4.2/bin/c++ -D_GNU_SOURCE -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS -isystem /home/frodo/public/ugls_lab-10.4.2/packages/clang/include -isystem /usr/include/libxml2 -std=gnu++20 -fno-rtti -o CMakeFiles/app.dir/main.cpp.o -c /home/yiboy/Desktop/clang_exercise/clang_libraries_companion/slides/examples/ast_visitor_1/main.cpp",
+  "file": "/home/yiboy/Desktop/clang_exercise/clang_libraries_companion/slides/examples/ast_visitor_1/main.cpp",
+  "output": "CMakeFiles/app.dir/main.cpp.o"
+},
+{
+  "directory": "/home/yiboy/Desktop/clang_exercise/clang_libraries_companion/slides/examples/ast_visitor_1",
+  "command": "/home/frodo/public/ugls_lab-10.4.2/bin/c++   -std=gnu++20 -o CMakeFiles/dummy.dir/data/simple_1.cpp.o -c /home/yiboy/Desktop/clang_exercise/clang_libraries_companion/slides/examples/ast_visitor_1/data/simple_1.cpp",
+  "file": "/home/yiboy/Desktop/clang_exercise/clang_libraries_companion/slides/examples/ast_visitor_1/data/simple_1.cpp",
+  "output": "CMakeFiles/dummy.dir/data/simple_1.cpp.o"
+},
+{
+  "directory": "/home/yiboy/Desktop/clang_exercise/clang_libraries_companion/slides/examples/ast_visitor_1",
+  "command": "/home/frodo/public/ugls_lab-10.4.2/bin/c++   -std=gnu++20 -o CMakeFiles/dummy.dir/data/hello.cpp.o -c /home/yiboy/Desktop/clang_exercise/clang_libraries_companion/slides/examples/ast_visitor_1/data/hello.cpp",
+  "file": "/home/yiboy/Desktop/clang_exercise/clang_libraries_companion/slides/examples/ast_visitor_1/data/hello.cpp",
+  "output": "CMakeFiles/dummy.dir/data/hello.cpp.o"
+}
+]

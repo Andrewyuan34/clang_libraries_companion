@@ -1,0 +1,10 @@
+/home/yiboy/Desktop/clang_exercise/clang_libraries_companion/slides/examples/ast_visitor_1/CMakeFiles/intrinsics_gen.dir
+/home/yiboy/Desktop/clang_exercise/clang_libraries_companion/slides/examples/ast_visitor_1/CMakeFiles/omp_gen.dir
+/home/yiboy/Desktop/clang_exercise/clang_libraries_companion/slides/examples/ast_visitor_1/CMakeFiles/acc_gen.dir
+/home/yiboy/Desktop/clang_exercise/clang_libraries_companion/slides/examples/ast_visitor_1/CMakeFiles/RISCVTargetParserTableGen.dir
+/home/yiboy/Desktop/clang_exercise/clang_libraries_companion/slides/examples/ast_visitor_1/CMakeFiles/clang-tablegen-targets.dir
+/home/yiboy/Desktop/clang_exercise/clang_libraries_companion/slides/examples/ast_visitor_1/CMakeFiles/app.dir
+/home/yiboy/Desktop/clang_exercise/clang_libraries_companion/slides/examples/ast_visitor_1/CMakeFiles/dummy.dir
+/home/yiboy/Desktop/clang_exercise/clang_libraries_companion/slides/examples/ast_visitor_1/CMakeFiles/demo.dir
+/home/yiboy/Desktop/clang_exercise/clang_libraries_companion/slides/examples/ast_visitor_1/CMakeFiles/edit_cache.dir
+/home/yiboy/Desktop/clang_exercise/clang_libraries_companion/slides/examples/ast_visitor_1/CMakeFiles/rebuild_cache.dir
