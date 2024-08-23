@@ -51,7 +51,7 @@ void processCommandLine(int argc, char** argv, std::string& pathname,
 	pathname.clear();
 	adjust = 0;
 	sourcePathnames.clear();
-	for (int c; (c = getopt(argc, argv, "a:j:f:")) >= 0;) {
+	for (int c; (c = getopt(argc, argv, "a:j:f:")) >= 0;) { //convert the arguments to a C style string
 		switch (c) {
 		case 'a':
 			adjust = std::atoi(optarg);
@@ -64,13 +64,13 @@ void processCommandLine(int argc, char** argv, std::string& pathname,
 			pathname = optarg;
 			json = false;
 			break;
-		}
+		} // Order matters here, if we input j first and then f, the json will be set to false, but if we input f first and then j, the json will be set to true
 	}
 	if (pathname.empty()) {
 		llvm::errs() << "ERROR: no compilation database specified\n";
 		std::exit(1);
 	}
-	for (int i = optind; i < argc; ++i) {sourcePathnames.push_back(argv[i]);}
+	for (int i = optind; i < argc; ++i) {sourcePathnames.push_back(argv[i]);} //optind is the index of the next element to be processed in argv
 }
 
 int main(int argc, char** argv) {
