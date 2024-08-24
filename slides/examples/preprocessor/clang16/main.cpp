@@ -46,7 +46,7 @@ private:
 };
 
 class IncludeFinderAction : public clang::PreprocessOnlyAction {
-	bool BeginSourceFileAction(clang::CompilerInstance& ci) override {
+	bool BeginSourceFileAction(clang::CompilerInstance& ci) override { // CompilerInstance is a class that holds an instance of the compiler and its associated tools, which includes source manager, preprocessor, and AST context.
 		std::unique_ptr<FindIncludes> findIncludes(
 		  new FindIncludes(ci.getSourceManager()));
 		clang::Preprocessor& pp = ci.getPreprocessor();
@@ -68,3 +68,22 @@ int main(int argc, char **argv) {
 	return tool.run(
 	  ct::newFrontendActionFactory<IncludeFinderAction>().get());
 }
+
+/*
+class FindPragmas : public clang::PPCallbacks {
+public:
+	FindPragmas(clang::SourceManager& sourceManager) :
+	  sourceManager_(&sourceManager) {}
+	
+	void PragmaDirective(clang::SourceLocation loc,
+	                     clang::PragmaIntroducerKind introducer) override {
+		if (!sourceManager_->isInMainFile(loc)) {return;}
+		
+		llvm::outs() << std::format("pragma directive:\n    location: {}\n",
+		  locationToString(*sourceManager_, loc));
+	}
+
+private:
+	clang::SourceManager* sourceManager_;
+};
+*/

@@ -1,0 +1,17 @@
+[
+  {
+    "directory": "/home/yiboy/Desktop/clang_exercise/clang_libraries_companion/slides/examples/yibo_example1_json_pragma",
+    "command": "/usr/bin/c++ -I/home/frodo/public/ugls_lab-10.4.2/packages/clang/include -std=c++20 -o fake1.o -c /home/yiboy/Desktop/clang_exercise/clang_libraries_companion/slides/examples/yibo_example1_json_pragma/data/fake1.cpp",
+    "file": "/home/yiboy/Desktop/clang_exercise/clang_libraries_companion/slides/examples/yibo_example1_json_pragma/data/fake1.cpp"
+  },
+  {
+    "directory": "/home/yiboy/Desktop/clang_exercise/clang_libraries_companion/slides/examples/yibo_example1_json_pragma",
+    "command": "/usr/bin/c++ -I/home/frodo/public/ugls_lab-10.4.2/packages/clang/include -std=c++20 -o fake2.o -c /home/yiboy/Desktop/clang_exercise/clang_libraries_companion/slides/examples/yibo_example1_json_pragma/data/fake2.cpp",
+    "file": "/home/yiboy/Desktop/clang_exercise/clang_libraries_companion/slides/examples/yibo_example1_json_pragma/data/fake2.cpp"
+  },
+  {
+    "directory": "/home/yiboy/Desktop/clang_exercise/clang_libraries_companion/slides/examples/yibo_example1_json_pragma",
+    "command": "/usr/bin/c++ -I/home/frodo/public/ugls_lab-10.4.2/packages/clang/include -std=c++20 -o fake3.o -c /home/yiboy/Desktop/clang_exercise/clang_libraries_companion/slides/examples/yibo_example1_json_pragma/data/fake3.cpp",
+    "file": "/home/yiboy/Desktop/clang_exercise/clang_libraries_companion/slides/examples/yibo_example1_json_pragma/data/fake3.cpp"
+  }
+]

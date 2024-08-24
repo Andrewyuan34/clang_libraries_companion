@@ -1,0 +1,98 @@
+# Ignore build directories
+build/
+cmake-build-*/
+
+# Ignore CMake generated files
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+CTestTestfile.cmake
+Makefile
+install_manifest.txt
+
+# Ignore Qt-specific generated files (if applicable)
+qrc_*.cpp
+ui_*.h
+moc_*.cpp
+*.pro.user
+*.qmake.stash
+*.pro.user.*
+
+# Ignore OS-specific files
+.DS_Store
+Thumbs.db
+
+# Ignore temporary files
+*.swp
+*.swo
+*.bak
+*.tmp
+*.log
+*.lock
+
+# Ignore compiled object files
+*.o
+*.obj
+*.lo
+*.lai
+*.la
+*.a
+*.so
+*.so.*
+*.dylib
+*.dll
+*.exe
+*.out
+*.app
+
+# Ignore static and dynamic libraries
+*.lib
+*.a
+*.la
+*.lo
+*.def
+*.exp
+*.pdb
+
+# Ignore debug and release directories
+Debug/
+Release/
+
+# Ignore generated binary files
+*.bin
+*.elf
+*.hex
+
+# Ignore IDE-specific files
+.vscode/
+.idea/
+*.iml
+
+# Ignore Python bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Ignore log files and databases
+*.log
+*.sql
+*.sqlite
+
+# Ignore other development files
+*.class
+*.war
+*.jar
+*.ear
+
+# Ignore personal or environment-specific files
+*.env
+.env.local
+.env.*.local
+*.local
+
+# Ignore Node.js dependencies (if applicable)
+node_modules/
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+
