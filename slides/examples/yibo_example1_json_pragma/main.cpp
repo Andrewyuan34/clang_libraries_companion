@@ -48,18 +48,12 @@ private:
     int& pragmaCount_;
 };
 
-#pragma message("This is a pragma message")
-#pragma message("This is a pragma message")
-#pragma message("This is a pragma message")
-#pragma message("This is a pragma message")
-
-
-// 自定义的 FrontendActionFactory
+// 自定义的 FrontendActionFactory工厂类，用于创建自定义的需要参数的 FrontendAction 对象
 class PragmaFinderActionFactory : public ct::FrontendActionFactory {
 public:
     explicit PragmaFinderActionFactory(int& pragmaCount) : pragmaCount_(pragmaCount) {}
 
-    std::unique_ptr<clang::FrontendAction> create() override {
+    std::unique_ptr<clang::FrontendAction> create() override { //注意这里的返回值，也是一个多态的应用
         return std::make_unique<PragmaFinderAction>(pragmaCount_);
     }
 
@@ -121,3 +115,26 @@ int main(int argc, char** argv) {
 
     return 0;
 }
+
+/*
+多态性分析
+FrontendAction 是基类：
+
+clang::FrontendAction 是一个抽象基类，用于定义 Clang 工具链中各种前端操作（如编译、预处理、语法树生成等）的接口。这个基类提供了一些纯虚函数，需要在派生类中实现。
+PragmaFinderAction 是派生类：
+
+PragmaFinderAction 类继承自 clang::PreprocessOnlyAction，该类是 clang::FrontendAction 的派生类，专门用于处理预处理器相关的操作。在 PragmaFinderAction 中，你实现了与特定任务相关的逻辑，例如统计 #pragma 指令。
+FrontendActionFactory 是用于创建 FrontendAction 对象的工厂：
+
+ct::FrontendActionFactory 是一个抽象工厂类，提供了创建 FrontendAction 对象的接口。工厂模式允许你根据需要灵活地创建不同的 FrontendAction 派生类对象。
+PragmaFinderActionFactory 是一个具体工厂类：
+
+PragmaFinderActionFactory 继承自 ct::FrontendActionFactory，并重写了 create() 方法，用于创建具体的 PragmaFinderAction 对象。
+多态的应用：
+
+在 tool.run(&actionFactory) 中，tool.run 函数接收一个指向 FrontendActionFactory 基类的指针 &actionFactory，并调用该工厂的 create() 方法来生成 FrontendAction 对象。这就是多态性发挥作用的地方，因为实际调用的是 PragmaFinderActionFactory::create() 方法，而该方法返回的是一个 PragmaFinderAction 对象。
+由于 tool.run() 函数在编译时并不知道 actionFactory 的具体类型（它只知道 actionFactory 是一个 FrontendActionFactory），多态性允许它在运行时调用实际的派生类方法（即 PragmaFinderActionFactory::create()）。
+总结
+多态性：通过使用基类指针或引用来调用派生类的重写函数实现多态性，这使得代码更加灵活和可扩展。
+工厂模式：通过工厂模式创建具体的 FrontendAction 对象，有助于将对象创建过程与使用过程解耦，这进一步增强了代码的可维护性和可扩展性。
+*/

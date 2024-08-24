@@ -50,6 +50,7 @@ class IncludeFinderAction : public clang::PreprocessOnlyAction {
 		std::unique_ptr<FindIncludes> findIncludes(
 		  new FindIncludes(ci.getSourceManager()));
 		clang::Preprocessor& pp = ci.getPreprocessor();
+		pp.SetSuppressIncludeNotFoundError(true);// SuppressIncludeNotFoundError is a flag that tells the preprocessor to suppress the error message when an included file is not found.
 		pp.addPPCallbacks(std::move(findIncludes));
 		return true;
 	}

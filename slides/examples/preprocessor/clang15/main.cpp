@@ -14,7 +14,7 @@ using namespace std::literals;
 static llvm::cl::OptionCategory toolCategory("Tool Options");
 
 std::string locationToString(const clang::SourceManager& sourceManager,
-  clang::SourceLocation sourceLoc) {
+  clang::SourceLocation sourceLoc) { 
 	return std::format("{}:{}:{}",
 	  std::string(sourceManager.getFilename(sourceLoc)),
 	  sourceManager.getSpellingLineNumber(sourceLoc),
