@@ -45,3 +45,4 @@ run_command "$run_clang_tool" "$program" -p "$build_dir" \
   panic "unexpected tool failure"
 
 python -c 'print("*" * 80)'
+

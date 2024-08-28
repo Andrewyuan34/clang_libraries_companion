@@ -27,6 +27,7 @@ std::string langKindToLangString(clang::LangStandard::Kind kind) {
 	return (i != lut.end()) ? (*i).second : "unknown";
 }
 
+//kind是一个枚举类型，它表示了编译器的语言标准，之后getlangStandardForKind(kind)返回一个LangStandard对象，它包含了对应的语言标准，然后通过调用getLanguage()方法，我们可以得到语言类型，如果是C++，则返回CXX，如果是C，则返回C，然后我们通过判断语言类型，返回对应的字符串
 std::string langKindToStdString(clang::LangStandard::Kind kind) {
 	clang::LangStandard langStd =
 	  clang::LangStandard::getLangStandardForKind(kind);
@@ -52,11 +53,13 @@ std::string langKindToStdString(clang::LangStandard::Kind kind) {
 	}
 }
 
+// 这里的类继承自SyntaxOnlyAction, which is a kind of ASTConsumer.
 class MyFrontendAction : public clang::SyntaxOnlyAction {
 	std::unique_ptr<clang::ASTConsumer> CreateASTConsumer(
 	  clang::CompilerInstance&, llvm::StringRef) override;
 };
 
+//这里compInstance是一个CompilerInstance对象，它包含了编译器的所有状态信息, getLangOpts()返回一个LangOptions对象，它包含了编译器的语言选项, Langstd 是langOptions的一个成员变量
 std::unique_ptr<clang::ASTConsumer> MyFrontendAction::CreateASTConsumer(
   clang::CompilerInstance& compInstance, llvm::StringRef inFile) {
 	const clang::LangOptions& langOpts = compInstance.getLangOpts();

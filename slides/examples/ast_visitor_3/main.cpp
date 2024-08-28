@@ -14,7 +14,7 @@ class MyAstVisitor : public clang::RecursiveASTVisitor<MyAstVisitor> {
 public:
 	MyAstVisitor(clang::ASTContext& astContext) : astContext_(&astContext),
 	  stack_() {}
-	bool TraverseCXXRecordDecl(clang::CXXRecordDecl* recDecl);
+	bool TraverseCXXRecordDecl(clang::CXXRecordDecl* recDecl); //这个函数名是有讲究的，Traverse + AST node type name
 private:
 	using Base = clang::RecursiveASTVisitor<MyAstVisitor>;
 	void printStack() const;
@@ -41,6 +41,8 @@ void MyAstVisitor::printStack() const {
 	}
 	llvm::outs() << s << '\n';
 }
+
+//核心是上面的部分，下面的部分是重复的
 
 class MyAstConsumer : public clang::ASTConsumer {
 public:

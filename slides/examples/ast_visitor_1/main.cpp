@@ -13,7 +13,7 @@ namespace ct = clang::tooling;
 class MyAstVisitor : public clang::RecursiveASTVisitor<MyAstVisitor> {
 public:
 	MyAstVisitor(clang::ASTContext& astContext) : astContext_(&astContext) {}
-	bool VisitFunctionDecl(clang::FunctionDecl* funcDecl) {
+	bool VisitFunctionDecl(clang::FunctionDecl* funcDecl) { // Every func start with Visit and then the name of the AST node type, would be called for each function declaration
 		const auto& fileId = astContext_->getSourceManager().getFileID(
 		  funcDecl->getLocation());
 		if (fileId == astContext_->getSourceManager().getMainFileID()) {
@@ -30,9 +30,9 @@ class MyAstConsumer : public clang::ASTConsumer {
 public:
 	void HandleTranslationUnit(clang::ASTContext& astContext) final {
 		clang::TranslationUnitDecl* tuDecl =
-		  astContext.getTranslationUnitDecl();
+		  astContext.getTranslationUnitDecl(); // get the translation unit Not that important because this method is repeatedly called for each translation unit in  every example
 		MyAstVisitor visitor(astContext);
-		visitor.TraverseDecl(tuDecl);
+		visitor.TraverseDecl(tuDecl); // traverse the translation unit, and do VisitFunctionDecl for each function declaration
 	}
 };
 
