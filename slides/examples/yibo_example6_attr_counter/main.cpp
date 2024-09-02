@@ -1,29 +1,37 @@
 #include <format>
-#include <vector>
-#include <clang/AST/ASTConsumer.h>
-#include <clang/AST/RecursiveASTVisitor.h>
-#include <clang/Frontend/CompilerInstance.h>
-#include <clang/Frontend/FrontendAction.h>
+#include <set>
+#include <string>
+#include <clang/ASTMatchers/ASTMatchers.h>
+#include <clang/ASTMatchers/ASTMatchFinder.h>
+#include <clang/Frontend/FrontendActions.h>
 #include <clang/Tooling/CommonOptionsParser.h>
 #include <clang/Tooling/Tooling.h>
 #include <llvm/Support/CommandLine.h>
 
 namespace ct = clang::tooling;
+namespace cam = clang::ast_matchers;
+
+const std::set<std::string> standardAttributes = {
+    "noreturn", "deprecated", "fallthrough", "nodiscard", 
+    "maybe_unused", "likely", "unlikely", "carries_dependency",
+    "no_unique_address", "assume"
+};
+
 
 struct AttributeCounter {
-    std::map<std::string, int> standardAttributes;
+    std::map<std::string, int> standardAttributeCounts;
     int nonStandardCount = 0;
 
-    void incrementStandard(const std::string &attr) {
-        standardAttributes[attr]++;
-    }
-
-    void incrementNonStandard() {
-        nonStandardCount++;
+    void increment(const std::string &attrName) {
+        if (standardAttributes.find(attrName) != standardAttributes.end()) {
+            standardAttributeCounts[attrName]++;
+        } else {
+            nonStandardCount++;
+        }
     }
 
     void printResults() const {
-        for (const auto &entry : standardAttributes) {
+        for (const auto &entry : standardAttributeCounts) {
             llvm::outs() << entry.second << " " << entry.first << "\n";
         }
         llvm::outs() << nonStandardCount << " all non-standard attributes (combined)\n";
@@ -31,95 +39,46 @@ struct AttributeCounter {
 };
 
 
-class AttributeVisitor : public clang::RecursiveASTVisitor<AttributeVisitor> {
+class AttributeMatchCallback : public cam::MatchFinder::MatchCallback {
 public:
-    explicit AttributeVisitor(clang::ASTContext& Context) : Context(&Context) {}
+    AttributeMatchCallback(AttributeCounter &Counter) : Counter(Counter) {}
 
-    bool VisitCXXRecordDecl(clang::CXXRecordDecl *ClassDecl) {
-        for (const auto *Attr : ClassDecl->attrs()) {
-            processAttr(Attr);
-        }
-        return true;
-    }
-
-    bool VisitFunctionDecl(clang::FunctionDecl *FuncDecl) {
-        for (const auto *Attr : FuncDecl->attrs()) {
-            processAttr(Attr);
-        }
-        return true;
-    }
-
-    bool VisitVarDecl(clang::VarDecl *VarDecl) {
-        for (const auto *Attr : VarDecl->attrs()) {
-            processAttr(Attr);
-        }
-        return true;
-    }
-
-    void processAttr(const clang::Attr *attribute) {
-        if (const auto *CXX11Attr = llvm::dyn_cast<clang::CXX11Attr>(attribute)) {
-            std::string attrName = CXX11Attr->getAttrName()->getName().str();
-            if (isStandardAttribute(attrName)) {
-                counter.incrementStandard(attrName);
-            } else {
-                counter.incrementNonStandard();//存在这种可能吗？
+    virtual void run(const cam::MatchFinder::MatchResult &Result) override {
+        if (const clang::Attr *Attr = Result.Nodes.getNodeAs<clang::Attr>("attr")) {
+            if(Result.Context->getSourceManager().isWrittenInMainFile(Attr->getLocation())){
+                std::string attrName = Attr->getSpelling();
+                Counter.increment(attrName);
             }
-        } else {
-            counter.incrementNonStandard();
         }
-    }
-
-    void printResults() const {
-        counter.printResults();
     }
 
 private:
-    clang::ASTContext *Context;
-    AttributeCounter counter;
-
-    bool isStandardAttribute(const std::string &name) const {
-        static const std::set<std::string> standardAttributes = {
-            "noreturn", "deprecated", "fallthrough", "nodiscard",
-            "maybe_unused", "likely", "unlikely", "carries_dependency",
-            "no_unique_address", "using", "assume"
-        };
-        return standardAttributes.find(name) != standardAttributes.end();
-    }
-};//似乎这个思路有点子问题，clang已经内置了很多C++ standard attributes，这里应该直接使用clang的API来判断是否是standard attribute
-
-
-class AttributeConsumer : public clang::ASTConsumer {
-public:
-    void HandleTranslationUnit(clang::ASTContext &Context) override {
-		AttributeVisitor Visitor(Context);
-        Visitor.TraverseDecl(Context.getTranslationUnitDecl());
-        Visitor.printResults();
-    }
+    AttributeCounter &Counter;
 };
 
-class MyFrontendAction : public clang::ASTFrontendAction {
-public:
-	std::unique_ptr<clang::ASTConsumer> CreateASTConsumer(
-	  clang::CompilerInstance& compInstance, clang::StringRef) final {
-		return std::unique_ptr<clang::ASTConsumer>{new AttributeConsumer};
-	}
-};
+static llvm::cl::OptionCategory optionCategory("Tool options");
 
-static llvm::cl::OptionCategory toolOptions("Tool Options");
-
-int main(int argc, char** argv) {
-	auto expectedOptionsParser = ct::CommonOptionsParser::create(argc,
-	  const_cast<const char**>(argv), toolOptions);
-	if (!expectedOptionsParser) {
-		llvm::errs() << std::format("Unable to create option parser ({}).\n",
-		  llvm::toString(expectedOptionsParser.takeError()));
+int main(int argc, const char **argv) {
+	auto expectedParser = ct::CommonOptionsParser::create(argc, argv,
+	  optionCategory);
+	if (!expectedParser) {
+		llvm::errs() << llvm::toString(expectedParser.takeError());
 		return 1;
 	}
-	ct::CommonOptionsParser& optionsParser = *expectedOptionsParser;
+	ct::CommonOptionsParser& optionsParser = expectedParser.get();
 	ct::ClangTool tool(optionsParser.getCompilations(),
 	  optionsParser.getSourcePathList());
-	int status = tool.run(
-	  ct::newFrontendActionFactory<MyFrontendAction>().get());
-	if (status) {llvm::errs() << "error detected\n";}
-	return !status ? 0 : 1;
+
+    AttributeCounter Counter;
+    AttributeMatchCallback Callback(Counter);
+
+    cam::MatchFinder Finder;
+
+    // Match attributes in declarations, statements, types, etc.
+    Finder.addMatcher(cam::attr().bind("attr"), &Callback);
+
+    tool.run(ct::newFrontendActionFactory(&Finder).get());
+
+    Counter.printResults();
+    return 0;
 }
