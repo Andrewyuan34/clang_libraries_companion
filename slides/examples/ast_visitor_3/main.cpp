@@ -25,7 +25,7 @@ private:
 bool MyAstVisitor::TraverseCXXRecordDecl(clang::CXXRecordDecl* recDecl) {
 	clang::SourceManager& sourceManager = astContext_->getSourceManager();
 	stack_.push_back(recDecl);
-	bool result = Base::TraverseCXXRecordDecl(recDecl);
+	bool result = Base::TraverseCXXRecordDecl(recDecl);//***********这里有个递归调用，所以才会这样写
 	if (sourceManager.getFileID(recDecl->getLocation()) ==
 	  sourceManager.getMainFileID()) {printStack();}
 	stack_.pop_back();

@@ -1,0 +1,8 @@
+[
+    {
+        "directory": "/home/yiboy/Desktop/clang_exercise/clang_libraries_companion/slides/examples/yibo_example5_AccessSpecifier/data",
+        "command": "g++ -c /home/yiboy/Desktop/clang_exercise/clang_libraries_companion/slides/examples/yibo_example5_AccessSpecifier/data/File3.cpp -o /home/yiboy/Desktop/clang_exercise/clang_libraries_companion/slides/examples/yibo_example5_AccessSpecifier/data/File3.o",
+        "file": "/home/yiboy/Desktop/clang_exercise/clang_libraries_companion/slides/examples/yibo_example5_AccessSpecifier/data/File3.cpp"
+    }
+]
+
