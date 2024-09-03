@@ -16,6 +16,8 @@ namespace cam = clang::ast_matchers;
 
 static llvm::cl::OptionCategory optionCategory("Tool options");
 
+
+// Get the parent of a statement that is of a specific type. Specifically, for a statement, get the parent statement that is of type NodeType.
 template<class NodeType>
 const NodeType* getParentOfStmt(clang::ASTContext& astContext,
   const clang::Stmt* stmt) {
@@ -44,6 +46,7 @@ unsigned getForDepth(clang::ASTContext& astContext,
 	return count;
 }
 
+
 class MyMatchCallback : public cam::MatchFinder::MatchCallback {
 public:
 	void run(const cam::MatchFinder::MatchResult& result) final;
@@ -62,6 +65,7 @@ void MyMatchCallback::onEndOfTranslationUnit() {
 	funcTab_.clear();
 }
 
+// The callback function that is called when a match is found.
 void MyMatchCallback::run(const cam::MatchFinder::MatchResult& result) {
 	const clang::SourceManager& sourceManager = *result.SourceManager;
 	auto forStmt = result.Nodes.getNodeAs<clang::Stmt>("for");
@@ -76,6 +80,7 @@ void MyMatchCallback::run(const cam::MatchFinder::MatchResult& result) {
 	}
 }
 
+// Set up the match condition
 cam::StatementMatcher getMatcher() {
 	using namespace cam;
 	auto f = anyOf(forStmt(), cxxForRangeStmt());
@@ -83,6 +88,7 @@ cam::StatementMatcher getMatcher() {
 	  "func")), unless(hasDescendant(stmt(f)))).bind("for");
 }
 
+// Initialize the AST matcher and the callback.
 struct MyAstConsumer : public clang::ASTConsumer {
 	void HandleTranslationUnit(clang::ASTContext& astContext) final {
 		MyMatchCallback matchCallback;
