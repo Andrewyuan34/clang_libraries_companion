@@ -13,6 +13,7 @@
 
 namespace ct = clang::tooling;
 
+//Get the top level statement of a statement through its parent chain.
 const clang::Stmt* getTopLevelStmt(clang::ASTContext& astContext,
   const clang::Stmt* stmt) {
 	const clang::Stmt* curStmt = stmt;
@@ -25,12 +26,14 @@ const clang::Stmt* getTopLevelStmt(clang::ASTContext& astContext,
 	return curStmt;
 }
 
+//Get the function declaration of a stmt through finding the top level statement of a statement and getting its parent function declaration.
 const clang::FunctionDecl* getContainingFuncDecl(clang::ASTContext& astContext,
   const clang::Stmt* stmt) {
 	const clang::Stmt* topStmt = getTopLevelStmt(astContext, stmt);
 	return getParentOfStmt<clang::FunctionDecl>(astContext, topStmt);
 }
 
+//Finding logic for the depth of a for statement.
 class MyAstVisitor : public clang::RecursiveASTVisitor<MyAstVisitor> {
 public:
 	using FuncTab = std::map<const clang::FunctionDecl*, unsigned>;
