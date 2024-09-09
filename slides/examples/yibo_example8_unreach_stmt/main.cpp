@@ -113,7 +113,7 @@ int main(int argc, const char **argv) {
     // 创建匹配器和回调
     UnreachableStmtAnalyzer Analyzer;
     cam::MatchFinder finder;
-    finder.addMatcher(cam::functionDecl(cam::hasBody(cam::stmt())).bind("func"), &Analyzer);//这里不熟悉需要查文档
+    finder.addMatcher(cam::functionDecl(cam::hasBody(cam::stmt())).bind("func"), &Analyzer);//这里不熟悉需要查文档，似乎有特别特别多matcher可以用，这里应该需要improve
 
     // 运行工具
     int status = tool.run(ct::newFrontendActionFactory(&finder).get());
