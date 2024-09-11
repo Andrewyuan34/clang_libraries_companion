@@ -77,17 +77,18 @@ struct MyMatchCallback : public cam::MatchFinder::MatchCallback {//这里是不�
                                                 llvm::outs() << "\n";
                                                 llvm::outs() << "Statement: '";
                                                 binOp->printPretty(llvm::outs(), nullptr, clang::PrintingPolicy(astContext->getLangOpts()));
-                                                llvm::outs() << "'\n";
+                                                //varDecl->getSourceRange().print(llvm::outs(), *result.SourceManager);
+                                                //lhs->printPretty(llvm::outs(), nullptr, clang::PrintingPolicy(astContext->getLangOpts()));
                                             }
+                                        }
                                     }
-                                }
                             }
+                        }
                     }
                 }
-            }   
+            }
         }
     }
-}
 };
 
 // 匹配器函数：匹配所有函数定义
@@ -142,5 +143,14 @@ Dead store detection 使用 liveness 信息来查找死存储：
 这个暂时还没想到解决办法。目前的方法只可以处理单纯由BinaryOperator构成的赋值语句。因此return 语句造成错误的返回值。
 
 2. 虽然能找到第一种node，但使用if (!liveVars->isLive(stmt, varDecl)) 并不能如我所想的那样得到基于stmt的vardecl的liveness信息。
-Solved 可以直接用block就行，因为生成的cfg本身就是在已找到的func的基础上生成的，因此可以直接迭代每个block就可以获得正确的想要的islive信息。
+[Solved] 可以直接用block就行，因为生成的cfg本身就是在已找到的func的基础上生成的，因此可以直接迭代每个block就可以获得正确的想要的islive信息。
+
+3. Return的表达式并不应该被判定为deadstore，但是现在的代码会判定为deadstore。
+[partly solved] 发现CFG生成的block里的element是按照倒着AST的顺序排列的，因此可以通过判断是否是block的最后一个element来判断是否是returnStmt。但目前还没有实现
+*/
+
+/*  
+这里还挺重要的，通过BinaryOperator得到DeclRefExpr，然后通过DeclRefExpr得到VarDecl，然后通过VarDecl得到变量的名字和类型。
+这条通路，看似直接，但实际从DeclRefExpr得到VarDecl的过程中，返回的VarDecl是对应该Variable的定义/声明的位置，而不是使用的位置。
+（引申出来，如果有多个定义呢？是回到最初的点，还是回到上一次赋值的点？）Ok 已确认是回到最初的定义的位置。
 */
