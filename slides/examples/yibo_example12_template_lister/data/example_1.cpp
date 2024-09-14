@@ -35,7 +35,7 @@ T add(T a, T b) {
 
 // 函数模板的显式特化 (FunctionDecl with TemplateSpecialization)
 template <>
-int add(int a, int b) {
+inline int add(int a, int b) {
     std::cout << "Specialized for int" << std::endl;
     return a + b;
 }
@@ -45,16 +45,13 @@ template <typename T>
 using MyAlias = std::add_const<T>;
 
 // 类型别名 (TypeAliasDecl)
-using IntConst = MyAlias<int>;
+//using IntConst = MyAlias<int>;
 
 // 非类型模板参数 (NonTypeTemplateParmDecl)
 template <typename T, int size>
 class Array {
     T arr[size];
 };
-
-MyClass<double> obj1;
-
 
 // 主函数
 int main() {
@@ -70,11 +67,10 @@ int main() {
     std::cout << "Function template: " << add(1.1, 2.2) << std::endl;
     std::cout << "Function template (specialized for int): " << add(1, 2) << std::endl;
 
-    IntConst myInt = 10;
-    std::cout << "Const int alias: " << myInt << std::endl;
+    //IntConst myInt = 10;
+    //std::cout << "Const int alias: " << myInt << std::endl;
 
     Array<int, 5> intArray;  // 使用非类型模板参数
 
     return 0;
 }
-
